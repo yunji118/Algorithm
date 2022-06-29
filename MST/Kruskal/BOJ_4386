@@ -72,7 +72,6 @@ public class BOJ_4386 {
 		
 		//소숫점 아래 2자리수만 나오게 하기. kruskal 실행
 		System.out.printf("%.2f", Kruskal());
-		
 
 	}
 	
