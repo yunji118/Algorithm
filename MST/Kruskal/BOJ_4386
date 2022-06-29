@@ -1,0 +1,124 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+public class BOJ_4386 {
+
+	static ArrayList<Edge> edgeList;  //간선들 간의 거리를 저장하는 리스트 (별, 별, 거리)
+	static int n,parents[]; //각 노드의 부모 노드를 저장하는 배열. kruskal에서 union find에 사용됨
+	static Cord[] arr;
+	
+	static class Cord{
+		double x,y;
+		public Cord(double x, double y) {
+			// TODO Auto-generated constructor stub
+			this.x= x;
+			this.y= y;
+		}
+	}
+	
+	//정점과 간선의길이를 저장
+	static class Edge implements Comparable<Edge>{  //객체 비교를 위해 comparable이라는 인터페이스를 사용. comparable은 자기 자신과 매개변수 개체를 비교
+		int start, end;
+		double dist;
+		
+		public Edge(int start, int end, double dist) {
+			// TODO Auto-generated constructor stub
+			//super();
+			this.start = start;
+			this.end = end;
+			this.dist = dist;
+		}
+		
+		//comparable 사용시 반드시 구현해주어야 함
+		@Override
+		public int compareTo(Edge o) {  //비교할 기준이 무엇인가를 정의 ( (start, end, dist) 중 비교할 기준이 무엇?)
+			// TODO Auto-generated method stub
+			return Double.compare(this.dist, o.dist);  //자기 자신의 dist가 o의 dist보다 큰지 작은지 비교
+		}
+	
+	}
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		n = Integer.parseInt(br.readLine());
+		arr = new Cord[n];
+		StringTokenizer st;
+		edgeList = new ArrayList<>();
+		
+		for(int i=0;i<n;i++) {
+			st = new StringTokenizer(br.readLine());
+			double tempx = Double.parseDouble(st.nextToken());
+			double tempy = Double.parseDouble(st.nextToken());
+			
+			arr[i] = new Cord(tempx,tempy);  //이런식으로 넘겨주는 구나
+		}
+		
+		//별들 간의 거리를 저장하기
+		for(int i=0;i<n;i++) {
+			Cord now = arr[i];  //현재 기준이 되는 별  
+			
+			for(int j=i+1;j<n;j++) {
+				Cord next = arr[j];  //거리를 구할 별
+				
+				//기준 별과 거리 구하기
+				double dist = Math.sqrt(Math.pow(next.x-now.x, 2)+Math.pow(next.y-now.y, 2));
+				
+				edgeList.add(new Edge(i,j,dist));  //(별,별,거리)의 edge를 생성하고 간선들 간의 거리를 저장하는 리스트에 저장
+			}
+		}
+		
+		//소숫점 아래 2자리수만 나오게 하기. kruskal 실행
+		System.out.printf("%.2f", Kruskal());
+		
+
+	}
+	
+	private static double Kruskal() {
+		edgeList.sort(null);  //거리를 기준으로 오름차순으로 정렬
+		
+		parents = new int[n];
+		//부모 초기 셋팅
+		for(int i=0;i<n;i++)
+			parents[i] = i;
+		
+		double res = 0.0;  //별자리 만드는 최소 비용
+		int cnt = 0;  //선택된 간선의 개수
+		for(Edge edge: edgeList) {  //edgeList 전부 살피기
+			if(union(edge.start, edge.end)) {  //합치는게 가능한 경우
+				res += edge.dist;  //비용 더해주기
+				if(++cnt == n-1)  //선택된 간선의 개수가 n-1인 경우
+					return res;
+			}
+		}
+		return res;
+		
+	}
+	
+	/*
+	private static void make() {
+		for(int i=0;i<n;i++)
+			parents[i] = i;
+	}
+	*/
+	
+	private static boolean union(int a, int b) {
+		int aRoot = find(a);
+		int bRoot = find(b);
+		if(aRoot == bRoot)  //둘의 부모가 같은 경우 사이클이 생기므로 합치지X
+			return false;
+		parents[bRoot] = aRoot;  //부모가 다른 경우 합쳐주기
+		return true;
+	}
+	
+	//부모 찾기
+	private static int find(int n) {
+		if(n==parents[n])  //최종 부모 노드를 return
+			return n;
+		//return parents[n] = find(parents[n]);   //부모를 아직 못 찾은 경우 재귀 호출
+		return find(parents[n]);
+	}
+
+}
