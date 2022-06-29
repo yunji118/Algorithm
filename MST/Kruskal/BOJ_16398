@@ -1,0 +1,99 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.StringTokenizer;
+
+public class BOJ_16398 {
+
+	static int n;
+	static ArrayList<Edge> edgeList;
+	static int parents[];
+	static int stars[][];
+	
+	private static class Edge implements Comparable<Edge>{
+		int start, end, weight;
+		
+		public Edge(int start, int end, int weight) {
+			// TODO Auto-generated constructor stub
+			super();
+			this.start = start;
+			this.end = end;
+			this.weight = weight;
+		}
+		
+		@Override
+		public int compareTo(Edge o) {
+			// TODO Auto-generated method stub
+			return this.weight-o.weight;
+		}
+	}
+	
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		n = Integer.parseInt(br.readLine());
+		edgeList = new ArrayList<>();
+		parents = new int[n];
+		stars = new int[n][n];
+		StringTokenizer st;
+		
+		
+		for(int i=0;i<n;i++) {
+			st = new StringTokenizer(br.readLine());
+			
+			for(int j=0;j<n;j++) {
+				stars[i][j] = Integer.parseInt(st.nextToken());
+			}
+		}
+		
+		for(int i=0;i<n;i++)
+			parents[i] = i;
+		
+		
+		for(int i=0;i<n;i++) {
+			for(int j=i+1;j<n;j++) {
+				
+				if(stars[i][j] != 0)
+					edgeList.add(new Edge(i,j,stars[i][j]));
+			}
+		}
+		
+		Collections.sort(edgeList); //weight기준으로 정렬
+		
+		long res=0;
+		int cnt=0;		
+		for(int i=0;i<edgeList.size();i++) {
+			if(cnt == n-1)
+				break;
+			
+			Edge e = edgeList.get(i);
+			
+			if(union(e.start, e.end)) {
+				cnt++;
+				res += e.weight;
+			}
+		}
+		
+		System.out.println(res);
+			
+	}
+	
+	private static int find(int x) {
+		if(x==parents[x])
+			return x;
+		return parents[x] = find(parents[x]);
+	}
+	
+	private static boolean union(int a, int b) {
+		int aRoot = find(a);
+		int bRoot = find(b);
+		
+		if(aRoot == bRoot)
+			return false;
+		parents[bRoot] = aRoot;
+		return true;
+	}
+
+}
