@@ -38,7 +38,6 @@ public class BOJ_4386 {
 			// TODO Auto-generated method stub
 			return Double.compare(this.dist, o.dist);  //자기 자신의 dist가 o의 dist보다 큰지 작은지 비교
 		}
-	
 	}
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
