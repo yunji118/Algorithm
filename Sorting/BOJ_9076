@@ -1,0 +1,47 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class BOJ_9076 {
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		int test_num = Integer.parseInt(br.readLine());
+		StringTokenizer st;
+		int score[];
+		while(test_num-- >0) {
+			//각 테스트에 대해 초기화
+			score= new int [5]; 
+			st = new StringTokenizer(br.readLine());
+			
+			for(int i=0;i<5;i++) {
+				score[i] = Integer.parseInt(st.nextToken());
+			}
+			Arrays.sort(score);
+			
+			if(score[3]-score[1] >= 4)
+				bw.write("KIN\n");
+			else {
+				int sum=0;
+				for(int j=1;j<=3;j++) {
+					sum += score[j];
+				}
+				bw.write(sum+"\n");
+				
+			}
+			
+		}
+		bw.flush();
+		bw.close();
+		
+		
+
+	}
+
+}
