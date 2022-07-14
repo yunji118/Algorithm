@@ -1,0 +1,62 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.StringTokenizer;
+
+public class BOJ_20301 {
+
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken());
+		int K = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+		int res[] = new int[N];
+		
+		Deque<Integer> dq = new ArrayDeque<>();
+		for(int i=1;i<=N;i++) {
+			dq.add(i);
+		}
+		
+		int cnt = 0; //현재 방향으로 몇 명을 삭제하였는가.
+		int now = 0; //지금 옮기고 있는 애
+		int idx = 0;
+		int dir = 0; //오른쪽
+		while(!dq.isEmpty()) {
+			cnt++;
+			
+			if(dir>=M) { //왼쪽방향 (=시계 반대)
+				now = dq.pollLast();
+			}
+			else {//오른쪽 방향(=시계 방향)
+				now = dq.pollFirst();
+			}
+				
+			if(cnt==K) { //K번째인 경우
+				res[idx++] = now;
+				dir++;
+				cnt=0;
+			}
+			else { //K번째가 아닌 경우
+				if(dir>=M)
+					dq.addFirst(now);
+				else
+					dq.addLast(now);
+			}
+			
+			
+			if(dir == M*2)
+				dir=0;				
+		}
+		
+		for(int i=0;i<N;i++) {
+			System.out.println(res[i]);
+		}
+
+	}
+
+}
