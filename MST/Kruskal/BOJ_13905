@@ -1,0 +1,84 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.StringTokenizer;
+
+public class BOJ_13905 {
+	
+	static ArrayList<Edge> edgeList;
+	static int parents[];
+	static int N;
+	private static class Edge implements Comparable<Edge>{
+		int start, end, weight;
+		
+		public Edge(int start, int end, int weight) {
+			// TODO Auto-generated constructor stub
+			this.start = start;
+			this.end = end;
+			this.weight = weight;
+		}
+		
+		@Override
+		public int compareTo(Edge o) {
+			// TODO Auto-generated method stub
+			return o.weight-this.weight;
+		}
+	}
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+		st = new StringTokenizer(br.readLine());
+		parents = new int[N+1];
+		edgeList = new ArrayList<>();
+		
+		int src = Integer.parseInt(st.nextToken());
+		int dest = Integer.parseInt(st.nextToken()); 
+		
+		for(int i=0;i<M;i++) {
+			st = new StringTokenizer(br.readLine());
+			edgeList.add(new Edge(Integer.parseInt(st.nextToken()),Integer.parseInt(st.nextToken()),Integer.parseInt(st.nextToken())));	
+		}
+		
+		for(int i=0;i<=N;i++)
+			parents[i] = i;
+		
+		Collections.sort(edgeList);
+		int res=0;
+		
+		for(int i=0;i<edgeList.size();i++) {
+			Edge e = edgeList.get(i);
+			
+			if(union(e.start, e.end)) {
+				
+				if(find(src) == find(dest)) {   //숭이와 혜빈이가 연결되었는지 확인
+					res = e.weight;  //어짜피 weight의 내림차순으로 정렬했기 때문에 가장 나중에 들어오는게 젤 작음.
+					break;
+				}	
+			}
+		}
+		
+		System.out.println(res);
+	}
+	
+	private static int find(int x) {
+		if(x == parents[x])
+			return x;
+		return parents[x] = find(parents[x]);
+	}
+	
+	private static boolean union(int a, int b) {
+		int aRoot = find(a);
+		int bRoot = find(b);
+		if(aRoot == bRoot)
+			return false;
+		parents[aRoot] = bRoot;
+		return true;
+	}
+
+}
