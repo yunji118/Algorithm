@@ -26,7 +26,6 @@ public class BOJ_2193 {
 			}
 				
 		}
-		
 		System.out.println(dp[N][0]+dp[N][1]);
 
 	}
