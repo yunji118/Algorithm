@@ -1,0 +1,71 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.StringTokenizer;
+
+public class BOJ_10866 {
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());
+		String input;
+		StringTokenizer st;
+		Deque<Integer> deq = new ArrayDeque<Integer>();
+		int num;
+		
+		for(int i=0;i<N;i++) {
+			st = new StringTokenizer(br.readLine());
+			input = st.nextToken();
+			
+			if(input.equals("push_back")) {
+				num = Integer.parseInt(st.nextToken());
+				deq.addLast(num);
+			}
+			else if(input.equals("push_front")) {
+				num = Integer.parseInt(st.nextToken());
+				deq.addFirst(num);
+			}
+			else if(input.equals("pop_front")) {
+				if(deq.isEmpty())
+					System.out.println(-1);
+				else
+					System.out.println(deq.pollFirst());
+			}
+			else if(input.equals("pop_back")) {
+				if(deq.isEmpty())
+					System.out.println(-1);
+				else
+					System.out.println(deq.pollLast());
+			}
+
+			else if(input.equals("size")) {
+				System.out.println(deq.size());
+			}
+			else if(input.equals("empty")) {
+				if(deq.isEmpty())
+					System.out.println(1);
+				else
+					System.out.println(0);
+			}
+			else if(input.equals("front")) {
+				if(deq.isEmpty())
+					System.out.println(-1);
+				else
+					System.out.println(deq.peekFirst());
+			}
+			else if(input.equals("back")) {
+				if(deq.isEmpty())
+					System.out.println(-1);
+				else
+					System.out.println(deq.peekLast());
+			}
+
+			
+		}
+
+	}
+
+}
