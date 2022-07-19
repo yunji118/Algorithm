@@ -1,0 +1,46 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.StringTokenizer;
+
+public class BOJ_10816 {
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());
+		HashMap<Integer, Integer> map = new HashMap<>(N);
+		//hashmap은 초과 용량이 들어오면 2배씩 늘리기 때문에 초반에 용량 정해주는게 좋음
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		StringBuilder sb = new StringBuilder();
+		int k, v;
+		for(int i=0;i<N;i++) {
+			k = Integer.parseInt(st.nextToken()); //현재 보고있는 key값
+			if(map.get(k) != null) { //이미 hashmap에 저장된 값인 경우
+				v = map.get(k);
+				map.put(k, ++v);
+			}
+			else { //처음 들어가는 값인 경우
+				map.put(k, 1);
+			}
+		}
+		
+		int M = Integer.parseInt(br.readLine());
+		st = new StringTokenizer(br.readLine());
+		int now;
+		for(int i=0;i<M;i++) {
+			now = Integer.parseInt(st.nextToken());
+			if(map.get(now) == null)
+				sb.append(0+" ");
+			else
+				sb.append(map.get(now)+" ");			
+		}
+		
+		System.out.println(sb.toString());
+	
+		
+	}
+
+}
