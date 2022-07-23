@@ -1,0 +1,54 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.StringTokenizer;
+
+public class BOJ_2110 {
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken());
+		int C = Integer.parseInt(st.nextToken());
+		int house[] = new int[N];  //[0]:집의 위치 [1]:공유기 설치 여부
+		
+		for(int i=0;i<N;i++) {
+			house[i]= Integer.parseInt(br.readLine());
+		}
+		
+		Arrays.sort(house); //이분탐색을 위한 정렬
+		
+		//최소거리를 이분탐색으로 찾는다
+		int high = house[N-1]-house[0]; //최소거리가 가질 수 있는 최댓값(가장 마지막 집-가장 첫번째 집)
+		int low = 1;  //최소거리가 가질 수 있는 최솟값(모든 집은 거리가 1이상 차이남)
+		
+		while(low<=high) {  //최소거리의 최댓값과 최솟값이 엇갈리면 끝내기
+			int mid = (low+high)/2;
+			int last = house[0]; //가장 최근에 공유기 설치
+			int cnt = 1; //현재 설치한 공유기 개수. 첫번째에 있는 집에 먼저 설치하고 시작한다.
+			
+			for(int i=1; i<N;i++) {
+				if(house[i]-last >= mid) { //현재 보고있는 집과 가장 최근에 공유기 설치한 곳의 간격이 mid보다 큰가?
+					cnt++; //간격보다 크므로 그곳에 설치
+					last = house[i]; //가장 최근에 설치한 집 갱신
+				}
+			}
+			
+			if(cnt >= C) { //설치해야할 공유기보다 더 많이 설치되거나 같은 경우 -> 간격을 넓혀도 됨
+				low = mid+1;
+			}
+			else { //설치해아할 공유기보다 덜 설치된 경우 ->간격을 좁혀도 됨
+				high = mid-1;
+			}
+			
+		}
+		System.out.println(low-1);
+		
+		
+
+	}
+
+}
