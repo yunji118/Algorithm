@@ -1,0 +1,53 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class BOJ_2961 {
+
+	static boolean visited[];
+	static int S[], B[];
+	static int N, min = Integer.MAX_VALUE;
+	
+	private static void bruteforce(int index) {
+		if(index == N) { //배열의 마지막까지 확인한 경우
+			int sour = 1;
+			int bitter = 0;
+			int cnt = 0;
+			for(int i=0;i<N;i++) {
+				if(visited[i] == true) {
+					sour *= S[i];
+					bitter += B[i];
+					cnt++;
+				}
+			}
+			if(cnt == 0) //아무 재료도 쓰지 않은 경우
+				return;
+			min = Math.min(min, Math.abs(sour-bitter));
+			return;
+		}
+		
+		visited[index] = true; //현재 재료를 넣는 경우
+		bruteforce(index+1);
+		visited[index] = false; //현재 재료를 넣지 않는 경우
+		bruteforce(index+1);
+	}
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		StringTokenizer st;
+		S = new int [N];
+		B = new int [N];
+		visited = new boolean[N];
+		for(int i=0;i<N;i++) {
+			st = new StringTokenizer(br.readLine());
+			S[i] = Integer.parseInt(st.nextToken());
+			B[i] = Integer.parseInt(st.nextToken());
+		}
+		bruteforce(0); //index=0부터 시작	
+		System.out.println(min);
+
+	}
+
+}
