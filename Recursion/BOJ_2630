@@ -1,0 +1,71 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class BOJ_2630 {
+	private static int arr[][];
+	private static int white, blue;
+	
+	private static void recursion(int r, int c, int size) { //구역이 같은 색으로 이루어졌는지 확인하기
+		
+		if(size ==1) { //종이 자르는 크기가 1인 경우 자르는거 끝내기
+			if(arr[r][c] ==0)
+				white++;
+			else
+				blue++;
+			return;
+		}
+		
+		if(isAllSame(r,c,arr[r][c],size)) { //종이가 모두 흰색이거나 파란색으로 칠해져있는 경우
+			if(arr[r][c]==0)
+				white++;
+			else
+				blue++;
+			return;
+		}
+		
+		//다른 색이 섞여있는 경우 종이를 더 자른다
+		recursion(r, c, size/2);
+		recursion(r+size/2, c, size/2);
+		recursion(r, c+size/2, size/2);
+		recursion(r+size/2, c+size/2, size/2);
+	}
+	
+	private static boolean isAllSame(int r, int c, int color, int size) {
+		for(int i=r;i<r+size;i++) {
+			for(int j=c;j<c+size;j++) {
+				if(color != arr[i][j]) //다른 색이 나온 경우
+					return false;
+			}
+		}
+		return true;
+	}
+
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		int N = Integer.parseInt(br.readLine());
+		arr= new int [N][N];
+		
+		
+		for(int i=0;i<N;i++) {
+			String input = br.readLine();
+			int idx=0;
+			for(int j=0;j<N;j++) {
+				arr[i][j] = input.charAt(idx)-'0';
+				idx+=2;
+			}
+		}
+		
+		white=0;
+		blue=0;
+		
+		recursion(0,0,N);
+		
+		System.out.println(white);
+		System.out.println(blue);
+
+	}
+
+}
