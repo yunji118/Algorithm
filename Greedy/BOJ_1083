@@ -1,0 +1,45 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class BOJ_1083 {
+
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int arr[] = new int [N];		
+		for(int i=0;i<N;i++) {
+			arr[i] = Integer.parseInt(st.nextToken());
+		}
+		int S = Integer.parseInt(br.readLine());
+		
+		for(int i=0;i<N && 0<S;i++) {
+			int max = -1, idx = -1;
+			for(int j=i;j<N && j<= i+S; j++) {  //움직일 수 있는 범위 내에서의 가장 큰 수를 찾기
+				if(max < arr[j]) {
+					max = arr[j];  //가장 큰 수
+					idx = j;  //가장 큰 수가 들어있는 인덱스
+				}
+			}
+			
+			//최대값이 들어있는 idx부터 왼쪽으로 가면서 교환.
+			for(int w = idx; w>i; w--) {
+				int temp = arr[w-1];
+				arr[w-1] = arr[w];
+				arr[w] = temp;
+				S--;
+			}
+			
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		for(int i:arr)
+			sb.append(i).append(' ');
+		System.out.println(sb);
+		
+	}
+
+}
