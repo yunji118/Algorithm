@@ -1,0 +1,52 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+
+public class BOJ_12873 {
+
+	private static int GetTurn(int t, int size) {
+		int ans = t;
+		ans *= t;
+		ans %= size;
+		ans *= t;
+		return ans%size;
+	}
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());
+		long t=1;
+		LinkedList<Integer> que = new LinkedList();
+		for(int i=1;i<=N;i++) {
+			que.add(i);
+		}
+		
+		long out = 0;
+		while(que.size() > 1) {
+			out = (out+t*t*t-1)%que.size();
+			que.remove((int)out); //t^3에 도달했으므로 삭제
+			t++;			
+		}
+		
+		/* 방법2
+		int end=0;
+		while(que.size() > 1) {
+			end = (end+GetTurn(t, que.size())-1)%que.size();
+			
+			for(int i=0;i<end;i++) {
+				int tmp = que.removeFirst();
+				que.addLast(tmp);
+			}
+			
+			if(end < 0)
+				end += que.size();
+			que.remove(end); //t^3에 도달했으므로 삭제
+			t++;
+		}
+		*/
+		System.out.println(que.peek());
+
+	}
+
+}
