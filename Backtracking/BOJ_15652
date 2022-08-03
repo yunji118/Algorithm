@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class BOJ_15652 {
@@ -19,7 +18,8 @@ public class BOJ_15652 {
 		visited = new int[N+1];
 		ans = new int [M];
 		
-		backtracking(0);
+		//backtracking(0);
+		betterway(0,1);
 		
 	}
 	
@@ -51,6 +51,22 @@ public class BOJ_15652 {
 				visited[i]--;					
 				
 			}
+		}
+		
+	}
+	
+	private static void betterway(int depth, int now) {
+		if(depth == M) {
+			for(int i=0;i<M;i++) {
+				System.out.print(ans[i]+" ");
+			}
+			System.out.println();
+			return;
+		}
+		
+		for(int i=now;i<=N;i++) {
+			ans[depth] = i;
+			betterway(depth+1, i);
 		}
 	}
 
