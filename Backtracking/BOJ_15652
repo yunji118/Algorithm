@@ -1,0 +1,57 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class BOJ_15652 {
+	
+	private static int N, M;
+	private static int visited[];
+	private static int[] ans;
+
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken()); //N까지의 자연수 중
+		M = Integer.parseInt(st.nextToken()); //M개 고르기. 중복 가능
+		visited = new int[N+1];
+		ans = new int [M];
+		
+		backtracking(0);
+		
+	}
+	
+	private static void backtracking(int depth) {
+		if(depth == M) {
+			for(int i=0;i<M;i++) {
+				System.out.print(ans[i]+" ");
+			}
+			System.out.println();
+			return;
+		}
+		
+		for(int i=1;i<=N;i++) {
+			if(visited[i]<M) {
+				visited[i]++;
+				if(depth == 0) {
+					ans[depth] = i;
+				}
+				else {  //depth == 0인 경우
+					if(ans[depth-1]<=i) {//비내림차순인가?
+						ans[depth] = i;
+					}
+					else {
+						visited[i]--;  //요거를 안해줘서 틀렸었음
+						continue;
+					}
+				}
+				backtracking(depth+1);
+				visited[i]--;					
+				
+			}
+		}
+	}
+
+}
