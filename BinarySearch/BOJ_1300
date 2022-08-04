@@ -19,7 +19,7 @@ public class BOJ_1300 {
 		while(lower<higher) {
 			long mid = (lower+higher)/2;
 			long count = 0; //x보다 작은 것의 개수
-			
+			 
 			//구구단의 각 단으로 나누기. x/단 = 각 단에서 x보다 작은 것의 개수
 			for(int i=1;i<=N;i++) {
 				count += Math.min(mid/i, N);  //각 단에서 x보다 작은 값은 N개를 넘지 않기 때문. (우리에게 주어진 배열이 N*N이므로)
