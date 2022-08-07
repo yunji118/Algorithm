@@ -1,0 +1,45 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.StringTokenizer;
+
+public class BOJ_7983 {
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());
+		int hw[][] = new int [N][2];
+		StringTokenizer st;
+		
+		for(int i=0;i<N;i++) {
+			st= new StringTokenizer(br.readLine());
+			hw[i][0] = Integer.parseInt(st.nextToken());   //걸리는 날짜
+			hw[i][1] = Integer.parseInt(st.nextToken());   //마감일
+		}
+				
+		Arrays.sort(hw, new Comparator<int []>() {
+			@Override
+			public int compare(int[] o1, int[] o2) {
+				// TODO Auto-generated method stub
+				return o1[1]-o2[1];
+			}
+		});  //오름차순 정렬
+		
+		int last = hw[N-1][1]; //가장 마지막에 끝나는 일
+		for(int i=N-1;i>=0;i--) {
+			
+			if(hw[i][1] <= last) {  //일과 일 사이의 여유가 있음. 마지막으로 끝난 날짜가 더 뒤에 있는 경우
+				last = hw[i][1] - hw[i][0];   //걸리는 날만큼 빼주기. 
+			}
+			else {  //마감기한보다 일찍 시작해야하는 경우.
+				last -= hw[i][0];
+			}
+		}
+
+		System.out.println(last);
+	}
+
+}
