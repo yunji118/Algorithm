@@ -1,0 +1,46 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+
+public class BOJ_2011 {
+	public static final int MOD = 1000000; // 모듈러 연산 상수
+
+	public static int solution(String code, int n) {
+		int answer;
+		
+		long dp[] = new long[n+1];
+		Arrays.fill(dp,0);
+		dp[0]=dp[1]=1;
+		
+		if(code.charAt(0)=='0')
+			return 0;
+		
+		for(int i=2;i<=n;i++){
+			int cur = i-1;
+			if(code.charAt(cur) == '0' && (code.charAt(cur-1)<'0' || code.charAt(cur-1)>'2'))
+				return 0;
+			if(code.charAt(cur) != '0')  //한글자 해석
+				dp[i] += dp[i-1];
+			
+			if(code.charAt(cur-1)=='1' || (code.charAt(cur)<='6' && code.charAt(cur-1)=='2'))  //두글자 해석
+				dp[i] += dp[i-2];
+			
+			dp[i] %= MOD;
+		}
+		
+		answer = (int)dp[n];
+		
+		return answer;
+	}
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		String str = br.readLine();
+		int answer = solution(str, str.length());
+		System.out.println(answer);
+	}
+
+}
