@@ -1,0 +1,86 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class BOJ_2667 {
+	static int map[][];
+	static ArrayList<Integer> ans;  //단지내 집의 수를 저장
+	static int danji;
+	
+	private static class Cord{
+		int first, second;
+		public Cord(int first, int second) {
+			// TODO Auto-generated constructor stub
+			this.first = first;
+			this.second = second;
+		}
+	}
+	
+	private static void bfs(int N) {
+		int count = 0;  //단지내의 집의 수
+		int x, y;
+		int dr[] = {0,0,-1,1};
+		int dc[] = {1,-1,0,0};
+		
+		Queue<Cord> que = new LinkedList<>();
+		
+		for(int i=0;i<N;i++) {
+			for(int j=0;j<N;j++) {
+				if(map[i][j] == 0)  //집이 없거나 이미 방문한 경우
+					continue;
+				else { //집이 있는 경우
+					danji++;  //단지 개수 늘리기
+					count = 0;
+					que.add(new Cord(i,j));
+					map[i][j] = 0;  //방문 체크
+					
+					while(!que.isEmpty()) { //인접한 곳에 집이 있으면 큐에 넣기. 주변에 집이 없으면 while loop 빠져나옴
+						count++;
+						x = que.peek().first;
+						y = que.peek().second;
+						que.poll();
+						for(int w=0; w<4; w++) { //상하좌우 탐색하기
+							if(x+dr[w] >= 0 && x+dr[w] < N && y+dc[w]>= 0 && y+dc[w] < N && map[x+dr[w]][y+dc[w]] == 1) { //지도의 범위 안에 있고 집이 있으면
+								que.add(new Cord(x+dr[w],y+dc[w])); //해당 위치를 큐에 저장
+								map[x+dr[w]][y+dc[w]] = 0; //방문체크
+							}
+						}
+						
+					}
+					
+					ans.add(count);
+				}
+			}
+		}
+	}
+	
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());
+		map = new int [N][N];
+		danji = 0;
+		String input;
+		ans = new ArrayList<>();
+		
+		for(int i=0;i<N;i++) {
+			input = br.readLine();
+			for(int j=0;j<N;j++) {
+				map[i][j] = input.charAt(j)-'0';
+			}
+		}
+		
+		bfs(N);
+		Collections.sort(ans);
+		System.out.println(danji);
+		for(int i=0;i<ans.size();i++) {
+			System.out.println(ans.get(i));
+		}
+		
+	}
+
+}
