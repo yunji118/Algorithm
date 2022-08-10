@@ -1,0 +1,80 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class BOJ_1260 {
+	static int map[][];
+	static int N,M;
+	static boolean visitedB[];
+	static boolean visitedD[];
+	static StringBuilder ansB;
+	static StringBuilder ansD;
+	private static void bfs(int v) {
+		Queue<Integer> que = new LinkedList<Integer>();
+		que.offer(v);
+		int temp;
+		visitedB[v] = true;
+		
+		while(!que.isEmpty()) {
+			temp = que.poll();
+			
+			for(int i=1;i<=N;i++) {
+				if(visitedB[i] == false && map[temp][i]==1) {
+					visitedB[i] = true;
+					que.offer(i);
+					ansB.append(i+" ");
+				}
+			}
+		}
+	}
+	
+	private static void dfs(int v) {
+		visitedD[v] = true;
+		for(int i=1;i<=N;i++) {
+			if(visitedD[i] == false &&map[v][i] == 1) {
+				visitedD[i] = true;
+				ansD.append(i+" ");
+				dfs(i);
+			}
+		}
+	}
+
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());  //정점의 개수
+		M = Integer.parseInt(st.nextToken());  //간선의 개수
+		int V = Integer.parseInt(st.nextToken());  //탐색을 시작할 정점의 번호
+		map = new int[N+1][N+1];
+		visitedB = new boolean [N+1];
+		visitedD= new boolean [N+1];
+		ansB = new StringBuilder();
+		ansD = new StringBuilder();
+		
+		for(int i=0;i<M;i++) {
+			st = new StringTokenizer(br.readLine());
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			map[a][b] = map[b][a] = 1;
+		}
+		
+		// dfs
+		int nodeD = V;
+		ansD.append(V+" ");
+		dfs(V);
+		System.out.println(ansD);
+		
+		//bfs
+		int nodeB = V;
+		ansB.append(V+" ");
+		bfs(V);
+		System.out.println(ansB);
+		
+		
+	}
+
+}
