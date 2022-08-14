@@ -1,0 +1,46 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.LinkedList;
+import java.util.StringTokenizer;
+
+public class BOJ_18115 {
+
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		int N = Integer.parseInt(br.readLine());
+		int A [] = new int [N];
+		LinkedList<Integer> list = new LinkedList<>(); //여기에 순서대로 카드 저장할 것임
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		for (int i=0;i<N;i++) { //기술 저장하기
+			A[i] = Integer.parseInt(st.nextToken());
+		}
+		
+		int card = 1;
+		for(int i=N-1;i>=0;i--) {
+			if(A[i] == 1) {
+				list.addFirst(card++);
+			}
+			else if(A[i] == 2) {
+				list.add(1, card++);
+			}
+			else {
+				list.addLast(card++);
+			}
+		}
+		
+		for(int i=0;i<N;i++) {
+			bw.write(list.removeFirst()+" ");
+		}
+		
+		bw.flush();
+		bw.close();
+
+	}
+
+}
