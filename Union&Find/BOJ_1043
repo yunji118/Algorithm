@@ -39,33 +39,34 @@ public class BOJ_1043 {
 		for(int i=0;i<M;i++) {  //파티 개수만큼 
 			st = new StringTokenizer(br.readLine());
 			int partynum = Integer.parseInt(st.nextToken());  //현재 파티에 참석해있는 사람 수
-			if(partynum>0) { 
+			
+			if(partynum>0) { //나보다 앞 사람을 가리키기 위한 용도(1회만 심어주면 됨)
 				pre = Integer.parseInt(st.nextToken()); 
 				party[i].add(pre);
 			}
 			
 			for(int j=1;j<partynum;j++) {
-				cur = Integer.parseInt(st.nextToken());
+				cur = Integer.parseInt(st.nextToken()); //현재 보고있는 사람
 				party[i].add(cur);
-				union(pre, cur);  //앞사람과 지금 사람을 union해서 같은 부모를 심어주기
+				union(pre, cur);  //앞사람과 지금 사람을 union해서 같은 부모를 심어주기 (같은 파티 내에서 연관관계 심어주기. 숫자 작은게 부모가 됨)
 				pre = cur;
 			}
 		}
 		
-		//진실을 아는 사람들의 부모는 같이 파티를 참여했으므로 true로 바꾸기
+		//진실을 아는 사람과 연관관계가 있으면 true로 바꿔주기
 		int parent;
 		for(int i=1;i<N+1;i++) {
-			if(knowtrue[i] == true) {
-				knowtrue[find(i)] = true;
+			if(knowtrue[i] == true) { //진실 아는 사람 발견
+				knowtrue[find(i)] = true; //진실 아는 사람의 부모도 true로 바꿔주기
 			}
 		}
 		
-		//파티를 전부 살피면서 진실을 아는 사람이 있는지 없는지 체그
+		//파티를 전부 살피면서 진실을 아는 사람이 있는지 없는지 체크
 		int ans=0;
 		for(int i=0;i<M;i++) {
 			if(party[i].size() > 0) {
-				parent = find(party[i].get(0));
-				if(knowtrue[parent] == false)
+				parent = find(party[i].get(0));  //파티에 참석한 첫번째 사람의 부모
+				if(knowtrue[parent] == false)  
 					ans++;
 			}
 		}
@@ -89,7 +90,7 @@ public class BOJ_1043 {
 		if(aRoot == bRoot)
 			return false;
 		else {
-			if(a>b) {
+			if(a>b) {  //숫자 작은게 부모가 됨
 				parents[aRoot] = bRoot;
 			}
 			else
