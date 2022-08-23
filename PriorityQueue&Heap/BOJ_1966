@@ -1,0 +1,63 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class BOJ_1966 {
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine()); //testcase의 수
+		StringTokenizer st;
+		StringBuilder sb = new StringBuilder();
+		for(int i=0;i<T;i++) {
+			st = new StringTokenizer(br.readLine());
+			int N = Integer.parseInt(st.nextToken()); //문서의 개수
+			int M = Integer.parseInt(st.nextToken()); //몇번째로 인쇄되었는지 궁금한 문서
+			LinkedList<int[]> que = new LinkedList<int[]>();
+			
+			st = new StringTokenizer(br.readLine());
+			for(int j=0;j<N;j++) {  //문서 중요도 입력받기  {초기위치, 중요도}
+				que.offer(new int[] {j,Integer.parseInt(st.nextToken())});
+			}
+			
+			int out = 0;
+			
+			while(!que.isEmpty()) {
+				int front[] = que.poll();  //가장 앞에있는 원소
+				boolean flag = true; //front에 있는 원소가 가장 큰 원소인가?
+				
+				for(int j=0;j<que.size();j++) {  //큐에 남아있는 원소들 살피기
+					if(front[1] < que.get(j)[1]) { //중요도가 더 큰 원소 발견
+						flag = false;
+						que.offer(front); //front 원소를 가장 뒤에 넣기
+						for(int w=0;w<j;w++) {
+							que.offer(que.poll());  
+						}
+						break;
+					}
+				}
+				
+				//front에 있는게 가장 큰 원소가 아니었으므로 다음으로 넘어가기
+				if(flag == false)
+					continue;
+				
+				//front에 있는게 가장 큰 원소임
+				out++;
+				if(front[0] == M)
+					break;
+				
+			}
+			sb.append(out+"\n");
+			
+		}
+		System.out.println(sb.toString());
+		
+
+	}
+
+}
