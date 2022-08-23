@@ -1,0 +1,42 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class BOJ_2798 {
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken()); //카드의 개수
+		int M = Integer.parseInt(st.nextToken()); //가장 가깝게 만들어야하는 수
+		int card[] = new int [N];
+		int sum = 0;
+		
+		st = new StringTokenizer(br.readLine());
+		for(int i=0;i<N;i++) {
+			card[i] = Integer.parseInt(st.nextToken());
+		}
+		
+		
+		for(int i=0;i<N-2;i++) {
+			for(int j=i+1;j<N-1;j++) {
+				for(int w=j+1;w<N;w++) {
+					int temp = card[i]+card[j]+card[w];
+					if(temp == M) {
+						sum = temp;
+						break;
+					}
+					else if(temp<M && temp>sum)
+						sum = temp;
+				}
+			}	
+		}
+		
+		System.out.println(sum);
+		
+	}
+	
+
+}
