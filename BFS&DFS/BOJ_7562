@@ -1,0 +1,78 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class BOJ_7562 {
+	
+	private static boolean[][] visited;
+	private static int T, size;
+	private static Edge start, dest;
+	
+	private static class Edge {		
+		int r, c, move=0;
+		public Edge(int r, int c, int move) {
+			// TODO Auto-generated constructor stub
+			this.r = r;
+			this.c = c;
+			this.move = move;
+		}
+	}
+	
+	private static int bfs() {
+		Queue<Edge> que = new LinkedList<>();
+		que.add(start);
+		visited[start.r][start.c] = true;
+		int dr[] = {2, 2, 1, 1, -2, -2, -1, -1};
+		int dc[] = {-1, 1, 2,- 2, 1, -1, 2, -2};
+		while(!que.isEmpty()) {
+			Edge temp = que.poll();
+			//visited[temp.r][temp.c] = true;
+			if(temp.r == dest.r && temp.c == dest.c) {
+				return temp.move;
+			}
+			for(int i=0;i<8;i++) {
+				int newr = temp.r + dr[i];
+				int newc = temp.c + dc[i];
+				
+				if(newr<size && newr>=0 && newc<size && newc>=0 && visited[newr][newc] == false) { //범위 내에 있고 아직 방문X 이면
+					visited[newr][newc] = true;
+					que.add(new Edge(newr, newc, temp.move+1));
+					
+				}
+				
+				
+			}
+		}
+		return 0;
+		
+	}
+	
+	
+
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		T = Integer.parseInt(br.readLine());
+		StringTokenizer st;
+		
+		StringBuilder sb = new StringBuilder();
+		
+		for(int i=0;i<T;i++) {
+			size = Integer.parseInt(br.readLine()); // 체스판의 크기
+			visited = new boolean[size][size];
+			//나이트가 현재 있는 칸
+			st = new StringTokenizer(br.readLine());			
+			start = new Edge(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()),0); //나이트가 있는 곳	
+			//도달하고 싶은 곳
+			st = new StringTokenizer(br.readLine());
+			dest = new Edge(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()),0);
+			
+			sb.append(bfs()+"\n");		
+		}
+		System.out.println(sb.toString());
+	}
+
+}
