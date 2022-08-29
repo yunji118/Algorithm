@@ -1,0 +1,34 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class BOJ_1157 {
+
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int alpha []= new int[26];
+		String input = br.readLine();
+		char upper[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T','U','V', 'W', 'X','Y','Z'}; 
+		
+		for(int i=0;i<input.length();i++) {
+			int idx = Character.toLowerCase(input.charAt(i))-'a';
+			alpha[idx]++;
+		}
+		
+		int maxcnt = 0;
+		char ans ='a';
+		for(int i=0;i<26;i++) {
+			if(alpha[i]> maxcnt) {
+				ans = upper[i];
+				maxcnt = alpha[i];
+			}
+			else if(alpha[i] == maxcnt) {
+				ans = '?';
+			}
+		}
+		
+		System.out.println(ans);
+	}
+
+}
