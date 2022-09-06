@@ -1,0 +1,72 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+
+public class BOJ_14503 {
+
+	private static int N, M;
+	private static int map[][];
+	private static int clean(int r, int c, int dir) {
+		int cnt = 0;
+		int dr[] = {-1,0,1,0};  //북 동 남 서  
+		int dc[] = {0,1,0,-1};
+		int nr, nc, i, back;
+		
+		while(true) {
+			
+			if(map[r][c] == 0){ //청소를 안 한 구역
+				cnt++;
+				map[r][c] = 5;  //청소했음을 표시
+			}
+			
+			for(i=0;i<4;i++) {
+				dir  = (dir+3) % 4;  //왼쪽으로 회전
+				nr = r + dr[dir];  //왼쪽방향의 좌표
+				nc = c + dc[dir];
+				if(map[nr][nc] == 0) { //아직 청소하지 않은 곳을 발견하면 거기로 이동하기.
+					r = nr;
+					c = nc;
+					break;
+				}
+			}
+			
+			if(i==4) {  //네 방향이 모두 벽이거나 청소가 되어있는 경우
+				back = (dir+2)%4;  //뒤 방향으로 가기
+				nr = r + dr[back];  //뒤 방향의 좌표
+				nc = c + dc[back];
+				if(map[nr][nc] == 1)  //뒤 방향으로 갈 수 없는 경우
+					break;
+				r = nr;
+				c = nc;
+			}
+		}
+		
+		return cnt;
+	}
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());  //세로
+		M = Integer.parseInt(st.nextToken());  //가로
+		map = new int [N][M];
+		
+		st = new StringTokenizer(br.readLine());
+		int nowr = Integer.parseInt(st.nextToken());
+		int nowc = Integer.parseInt(st.nextToken());
+		int dir = Integer.parseInt(st.nextToken());
+		
+		for(int i=0;i<N;i++) {
+			st = new StringTokenizer(br.readLine());
+			for(int j=0;j<M;j++) {
+				map[i][j] = Integer.parseInt(st.nextToken());   //빈칸==0 벽==1
+			}
+		}
+		
+		System.out.println(clean(nowr, nowc, dir));
+
+	}
+
+}
