@@ -1,0 +1,32 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Stack;
+
+public class BOJ_10799 {
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String input = br.readLine();
+		Stack<Character> stack = new Stack<>();
+		int piece = 0;
+		for(int i=0;i<input.length();i++) {
+			
+			if(input.charAt(i) == '(') {
+				stack.add('(');
+			}
+			else { // now == )
+				stack.pop();
+				if(input.charAt(i-1) == '(') { //직전에 (  즉, ()로 현재 레이저인 경우
+					piece += stack.size();
+				}
+				else { //이전 문자가 )인 경우.  즉, ))  -> 막대기의 끝을 만난 것임
+					piece++;
+				}
+			}
+		}
+		System.out.println(piece);
+	}
+
+}
