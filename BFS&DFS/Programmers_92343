@@ -2,6 +2,8 @@ import java.util.*;
 import java.io.*;
 
 class Solution {
+    //놓친 부분: wolf>=sheep에서 return 값을 answer로 해줘야한다는 것, 노드의 방문 순서가 중요하지 않다는 것, 현재 방문 가능한 노드들에 집중해서 풀었어야한다는 것, 방문가능한 노드리스트의 갱신
+    
     public static ArrayList<Integer>[] adjlist;
     public int dfs(int nowidx, int wolf, int sheep, ArrayList<Integer> nextnode, int[] info,int answer){
         
@@ -26,7 +28,7 @@ class Solution {
             tempnext.remove(i);  //다음 방문할 노드는 삭제하기
             
             for(int j=0;j<adjlist[nextnode.get(i)].size();j++){//nextnode에 저장된 노드를 하나씩 살피기. 해당 노드와 인접한 모든 노드를 tempnext에 저장
-                tempnext.add(adjlist[nextnode.get(i)].get(j)); //인접 노드의 인접 노드를 살피기
+                tempnext.add(adjlist[nextnode.get(i)].get(j)); //인접 노드의 인접 노드를 살피면서 추가하기
             }
             answer = dfs(nextnode.get(i), wolf, sheep, tempnext, info, answer);
         }
