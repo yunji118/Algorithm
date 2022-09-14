@@ -1,0 +1,56 @@
+import java.util.*;
+import java.io.*;
+
+class Solution {
+    public static ArrayList<Integer>[] adjlist;
+    public int dfs(int nowidx, int wolf, int sheep, ArrayList<Integer> nextnode, int[] info,int answer){
+        
+        /*현재 보고있는 노드가 양인가 늑대인가에 따라 개수 증가*/
+        if(info[nowidx] == 0)
+            sheep++;
+        else
+            wolf++;
+        
+        answer = Math.max(answer, sheep);  //가장 많은 양의 값으로 저장한다
+        
+        //늑대 수>=양의 수 면 return해서 함수를 끝내기
+        if(wolf>=sheep)
+            return answer;
+        
+        //현재 방문가능한 노드들을 순서대로 방문한다.
+        for(int i=0;i<nextnode.size();i++){
+            ArrayList<Integer> tempnext = new ArrayList<>(); //방문할 수 있는 node의 list를 갱신해나가기
+            for(int j=0;j<nextnode.size();j++){  //nextnode에 있는 노드들을 tempnext로 옮기기
+                tempnext.add(nextnode.get(j));
+            }
+            tempnext.remove(i);  //다음 방문할 노드는 삭제하기
+            
+            for(int j=0;j<adjlist[nextnode.get(i)].size();j++){//nextnode에 저장된 노드를 하나씩 살피기. 해당 노드와 인접한 모든 노드를 tempnext에 저장
+                tempnext.add(adjlist[nextnode.get(i)].get(j)); //인접 노드의 인접 노드를 살피기
+            }
+            answer = dfs(nextnode.get(i), wolf, sheep, tempnext, info, answer);
+        }
+        return answer;
+        
+    }
+    public int solution(int[] info, int[][] edges) {
+       adjlist = new ArrayList[info.length];  //인접배열을 저장할 arraylist 생성. 각 node마다 인접한 node가 있으므로 총 node의 개수(=info.length)만큼 arraylist 배열 생성해주기
+        
+        /*각 노드별 arraylist 생성해주기*/
+        for(int i=0;i<info.length;i++)
+            adjlist[i] = new ArrayList<>();
+        
+        int answer = 1; //첫번째 0번 노드는 무조건 양이므로. 양의 개수는 최소 1개이상.
+        for(int i=0;i<edges.length;i++){ //인접리스트에 인접한 노드들 저장하기. 부모 노드가 index가 되고 자식이 값이 된다.
+            adjlist[edges[i][0]].add(edges[i][1]);
+        }
+        
+        ArrayList<Integer> nextnode = new ArrayList<>(); //인접노드들을 저장할 arraylist
+        for(int i=0;i<adjlist[0].size();i++){  //처음에 시작할 0번 노드와 인접해있는 모든 노드를 nextnode에 저장해주기
+            nextnode.add(adjlist[0].get(i));
+        }
+       
+        answer = dfs(0,0,0,nextnode, info,answer);
+        return answer;
+    }
+}
