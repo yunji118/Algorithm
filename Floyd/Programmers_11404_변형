@@ -1,0 +1,66 @@
+import java.util.*;
+import java.io.*;
+
+//본 시험에서는 solution 코드와 별도로 필요한 함수만 작성합니다.
+public class Main{
+	public static int solution(int n, int s, int a, int b, int[][] fares, int lay) {
+		int INF = 100_000_000;
+		int answer = INF;
+		
+		/*초기화*/
+		int map[][] = new int[n+1][n+1];
+		for(int i=1;i<=n;i++){
+			Arrays.fill(map[i], INF);
+			map[i][i] = 0;
+		}
+		
+		for(int i=0;i<fares.length;i++){
+			map[fares[i][0]][fares[i][1]] = map[fares[i][1]][fares[i][0]] = fares[i][2];
+			
+		}
+		
+		/*플로이드 워셜. 모든 지점에 대해 최적의 경우가 나옴*/
+		for(int i=1;i<=n;i++){ //거쳐가는 점
+			for(int start = 1; start<=n; start++){ //시작점
+				for(int end = 1; end<=n; end++){ //도착점
+					map[start][end] = Math.min(map[start][end], map[start][i]+map[i][end]);  //지점 i를 지나는게 이득인 경우에 갱신
+				}
+			}
+		}
+		
+		for(int i=1;i<=n;i++){  //시작점 -> 경유지 -> a, b의 도착 장소 까지 가는데 가장 필요한 cost
+			answer = Math.min(answer, map[s][lay]+map[lay][i]+map[i][a]+map[i][b]);
+		}
+		
+		return answer;
+	}
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		String str = br.readLine();
+		StringTokenizer st = new StringTokenizer(str);
+		int n = Integer.parseInt(st.nextToken());  //지점의 개수
+		int s = Integer.parseInt(st.nextToken());  //출발지점
+		int a = Integer.parseInt(st.nextToken());
+		int b = Integer.parseInt(st.nextToken());
+		int c = Integer.parseInt(st.nextToken());   //함께 볼 일이 있는 경유지
+
+		//경로의 개수 : 9
+		int i = 9;
+		int[][] fares = new int[i][3];
+		while (i-- > 0) {
+			str = br.readLine();
+			st = new StringTokenizer(str);
+			int u = Integer.parseInt(st.nextToken());
+			int v = Integer.parseInt(st.nextToken());
+			int w = Integer.parseInt(st.nextToken());
+
+			fares[i] = new int[] { u, v, w };
+		}
+
+		int answer = solution(n, s, a, b, fares, c);
+		System.out.println(answer);
+	}
+	
+}	
