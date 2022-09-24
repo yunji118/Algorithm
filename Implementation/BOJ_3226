@@ -1,0 +1,68 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class team_1 {
+
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine()); //상근이가 건 전화의 수
+		StringTokenizer st;
+		long sum = 0;
+		//7시~19시 1분당 10원 
+		//19시~7시 1분당 5원
+		for(int i=0;i<N;i++) {
+			//sum = 0;
+			st = new StringTokenizer(br.readLine());
+			String start = st.nextToken(); //HH:MM 전화를 시작한 시각
+			int D = Integer.parseInt(st.nextToken());
+			
+			int hour = (start.charAt(0)-'0')*10 + (start.charAt(1)-'0');
+			int minute =(start.charAt(3)-'0')*10 + (start.charAt(4)-'0');
+			
+			
+			if(minute+D >= 60) { //60분이 넘어서 시간으로 넘어가는 경우
+				hour++;
+				
+				if(hour == 24) {
+					hour = 0;
+					sum += D*5;
+				}
+				
+				else if(hour == 19) {// 19시 넘기는 경우  25qns + 50qns = 75분
+					sum += (60-minute) * 10; //35분
+					sum += (D+minute - 60)*5; //15분
+				}
+				else if(hour == 7){ //싸다가 비싸짐
+					sum += (60-minute) * 5;
+					sum += (D+minute - 60)*10;
+					
+				}
+				else if(hour<19 && hour>=7){ //비싼 시간대
+					sum += D*10;
+				}
+				else if(hour<7 || hour >=19){  //저렴한 시간대
+					sum += D*5;
+				}
+				
+			}
+			else{ //minute은 60 안 넘음
+				if(hour>=19 || hour<7) { //싼 시간대
+					sum += D*5;
+				}
+				else if(hour<19 || hour>=7){ //비싼시간대
+					sum += D*10;
+				}
+				
+			}
+			
+			//System.out.println("sum="+sum);
+		}
+		
+		System.out.println(sum);
+
+	}
+
+}
