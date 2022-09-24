@@ -1,0 +1,75 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class BOJ_9742 {
+	private static char temp[];
+	private static boolean visit[];
+	private static int idx;
+	private static int num;
+	private static char arr[];
+	
+	static void permutation(int cnt) {
+		
+		if (cnt == arr.length) { //순열 1개 완성  
+			idx++;
+			if(num == idx) { 
+				
+				for(int i=0;i<arr.length;i++) {
+					//sb.append(result);
+					arr[i] = temp[i];
+				}
+				//sb.append(result);
+				//System.out.println(result);
+			
+			}
+			return;
+		}
+		
+		for (int i=0;i<arr.length;i++) {
+			if(visit[i])
+				continue;
+			visit[i] = true;
+			temp[cnt] = arr[i];
+			permutation(cnt+1);
+			visit[i] = false;
+			
+		}
+	}
+	
+	public static void main(String[] args)throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br =new BufferedReader(new InputStreamReader(System.in));
+		//sb = new StringBuilder();
+		String rd = null;
+		
+		while((rd = br.readLine()) != null) {
+			
+			StringTokenizer st=new StringTokenizer(rd," ");
+			arr = st.nextToken().toCharArray();
+			num=Integer.parseInt(st.nextToken());
+			
+			//sb.append(rd + " = "); //여기서 어려웠음!!!! 이게 항상 permutation보다 앞에 있어야함!!!
+			idx=0;
+			visit=new boolean[arr.length];
+			temp=new char[arr.length];
+			
+			permutation(0);
+			System.out.print(rd + " = ");
+			if(idx<num) {
+				System.out.println("No permutation");
+				
+			}else {
+				for (int j = 0; j < arr.length; j++) {
+					System.out.print(arr[j]);
+				}
+				System.out.println();
+			}
+
+		}
+			
+		
+	}
+
+}
