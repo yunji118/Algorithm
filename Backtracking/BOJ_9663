@@ -1,0 +1,40 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class BOJ_9663 {
+
+	private static int N;
+	private static int cnt;
+	private static int board[];
+	private static boolean isvalid(int depth) {
+		for(int i=1; i<depth; i++) {
+			if (board[i] == board[depth] || Math.abs(board[i] - board[depth]) == Math.abs(i - depth)) { // 1. 이전 열에서 같은 행에 queen이 있는 경우  2. 대각선에 있는 경우 -> x좌표의 차이값과 y와 좌표의 차이값이 같으면 대각선 상에 위치함
+				return false;
+			}
+		}
+		return true;
+	}
+	private static void backtracking(int depth) { //depth: 현재 채워야하는 열
+		if (depth > N) { //여기서 실수 있었음. depth == N이 아니라 depth > N 이어야함. depth == N인 경우엔 N번째 열을 채워야하기 때문
+			++cnt;
+			return;
+		}
+		for(int i=1; i<=N; i++) {
+			board[depth] = i; //depth열에 i번째 row에 queen을 둔 경우
+			if(isvalid(depth)) { //그게 가능한가?
+				backtracking(depth + 1); //다음 열에 두러가기
+				//board[depth] = 0;  //필요 없음. 어짜피 for문 돌면서 다음 행에 퀸을 두는걸로 덮어 씌우기 때문이다.
+			}
+		}
+	}
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		cnt = 0;
+		board = new int [N + 1];
+		backtracking(1);
+		System.out.println(cnt);
+	}
+}
