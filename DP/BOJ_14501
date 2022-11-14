@@ -1,0 +1,68 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class BOJ_14501 {
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());   //N+1일에 퇴사
+		int T[] = new int [N+1];
+		int P[] = new int [N+1];
+		int dp[] = new int [N+2]; 
+		StringTokenizer st;
+		for(int i=1;i<=N;i++) {
+			st = new StringTokenizer(br.readLine());
+			T[i] = Integer.parseInt(st.nextToken());
+			P[i] = Integer.parseInt(st.nextToken());
+		}
+		dp[0] = 0;
+		
+		/*
+		 * dp[i]는 i날부터 상담을 했을 때 벌 수 있는 최고 금액
+		 * ex) dp[5] = 5일부터 일 한 값 중 최고 금액. 즉, 7일..6일..5일.. 하면서 일을 시작한 날짜를 앞당기기! 점점 돈을 많이 벌게 되겠지.
+		 * -->dp[1]이 답이 되겠구나.
+		 * 
+		 * i날의 상담을 선택하면 i~ i + T[i] - 1까지 그 상담을 함. i + T[i]일부터는 놀게 된다.
+		 * 
+		 * i + T[i] > N + 1 이면 i날짜의 상담을 선택했을 때 퇴사 날짜를 못 지키므로 선택할 수 없음.
+		 * 		따라서 dp[i] = dp[i + 1]이 됨. (ex. i=5의 상담을 선택하지 못하면 6일부터 시작한 것과 다를 바 없으므로)
+		 * 
+		 * i + T[i] <= N + 1 이면 i날짜의 상담을 진행할 수 있음.
+		 * 		1. i날짜의 상담을 선택한 경우
+		 * 			i날짜의 상담비용인 P[i] + i날짜 이후에 번 돈의 최댓값인 dp[i+T[i]]   -> dp[i+T[i]] + P[i]
+		 * 
+		 * 		2. i날짜의 상담을 선택하지 않은 경우  -> dp[i + 1]
+		 * 	둘 중 더 큰 값을 dp[i]에 넣어주기
+		 */
+		for(int i=N;i>0;i--) {
+			if(i + T[i] > N+1) {
+				dp[i] = dp[i+1];
+			}
+			else {
+				dp[i] = Math.max(dp[i+1], P[i] + dp[i + T[i]]);
+			}
+		}
+		System.out.println(dp[1]);
+		
+		/*
+		//day날까지 일했을 때 벌 수 있는 최대 금액
+		for(int day=1;day<N+1;day++) { //1일부터 N일까지 상담을 선택할 수 있음
+			if (day + T[day] <= N + 1) {  //퇴사 전까지 끝낼 수 있는가?  //day날의 상담을 선택
+				for(int i=0;i<day;i++) {  //day보다 이전 날들 살펴보기.
+					if (i + T[i] <= day) { //i날의 상담을 선택했을 때, day날에 상담할 수 있는가? (i + T[i] 해서 day가 나오면 i ~ day-1 까지 상담한거임)
+						dp[day] = Math.max(dp[day], dp[i] + P[day]);
+						//현재 저장된 값 vs (i날까지 일을 했을 때의 최대 금액 + day날 일했을 때)
+					}
+				}
+				ans = Math.max(ans, dp[day]);  //어느날의 상담까지 해야 가장 많이 버는지 저장.
+			}
+		}
+		
+		System.out.println(ans);
+		*/
+	}
+
+}
