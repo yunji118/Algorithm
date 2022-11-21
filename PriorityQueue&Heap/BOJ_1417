@@ -1,0 +1,50 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.PriorityQueue;
+
+public class BOJ_1417 {
+	private static class Candidate implements Comparable<Candidate>{
+		int vote;
+		int num;
+		public Candidate(int num, int vote) {
+			// TODO Auto-generated constructor stub
+			this.num = num;
+			this.vote = vote;
+		}
+		@Override
+		public int compareTo(Candidate o) {
+			// TODO Auto-generated method stub
+			if (this.vote == o.vote)
+				return this.num - o.num;
+			return o.vote - this.vote;
+		}
+	}
+
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());   //후보의 수
+		int ans = 0;    //매수해야하는 사람의 최솟값
+		PriorityQueue<Candidate> pq = new PriorityQueue<>();
+		int dasom = Integer.parseInt(br.readLine());
+		for(int i=1;i<N;i++) {
+			int vote = Integer.parseInt(br.readLine());
+			pq.add(new Candidate(i+1, vote));
+		}
+		
+		if (N > 1) {
+			while(true) {
+				Candidate first = pq.poll();
+				if (first.vote < dasom) {  //현재 득표수 1등이 다솜인경우
+					break;
+				}
+				--(first.vote);
+				++ans;
+				++dasom;
+				pq.add(first);		
+			}
+		}
+		System.out.println(ans);
+	}
+}
