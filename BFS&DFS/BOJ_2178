@@ -1,0 +1,60 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class BOJ_2178 {
+
+	private static int map[][];
+	private static int N, M;
+	private static boolean visited[][];
+	private static class Cord{
+		int r, c;
+		public Cord(int r, int c) {
+			// TODO Auto-generated constructor stub
+			this.r = r;
+			this.c = c;
+		}
+	}
+	private static void bfs() {
+		Queue<Cord> que = new LinkedList<>();
+		int dr[] = {0, 0, -1, 1};
+		int dc[] = {1, -1, 0, 0};
+		que.add(new Cord(0,0));
+		while (!que.isEmpty()) {
+			int nowr = que.peek().r;
+			int nowc = que.peek().c;
+			que.poll();
+			for(int i=0;i<4;i++) {
+				int tempr = nowr + dr[i];
+				int tempc = nowc + dc[i];
+				if (tempr >= 0 && tempr < N && tempc >=0 && tempc < M && 0 < map[tempr][tempc] && !visited[tempr][tempc]) {
+					que.add(new Cord(tempr, tempc));
+					map[tempr][tempc] = map[nowr][nowc] + 1;
+					visited[tempr][tempc] = true;
+				}
+			}
+		}
+	}
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		map = new int [N][M];
+		visited = new boolean[N][M];
+		for(int i=0;i<N;i++) {
+			String input = br.readLine();
+			for(int j=0;j<M;j++) {
+				map[i][j] = input.charAt(j) - '0';
+			}
+		}
+		bfs();
+		visited[0][0] = true;
+		System.out.println(map[N-1][M-1]);
+	}
+
+}
