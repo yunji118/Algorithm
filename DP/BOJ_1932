@@ -1,0 +1,50 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class BOJ_1932 {
+
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());   //삼각형의 크기
+		int arr[][] = new int [N][N];
+		for(int i=0;i<N;i++) {
+			for(int j=0;j<N;j++) {
+				arr[i][j] = -1;
+			}
+		}
+		
+		for(int i=0;i<N;i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			for(int j=0;j<i + 1;j++) {
+				arr[i][j] = Integer.parseInt(st.nextToken());
+			}
+		}
+		int dp[][] = new int [N][N];
+		dp[0][0] = arr[0][0];
+		if (N > 1) {
+			for(int n=1;n<N;n++) {
+				for(int idx=0;idx<N;idx++) {
+					if (idx == 0)  //삼각형의 왼쪽 끝
+						dp[n][idx] = dp[n-1][idx] + arr[n][idx];
+					else if (idx == n)  //삼각형의 오른쪽 끝
+						dp[n][idx] = dp[n-1][idx-1] + arr[n][idx];
+					else
+						dp[n][idx] = Math.max(dp[n-1][idx-1], dp[n-1][idx]) + arr[n][idx];
+				}
+			}
+			int max = 0;
+			for(int i=0;i<N;i++) {
+				max = Math.max(max, dp[N-1][i]);
+			}
+			System.out.println(max);
+		}
+		else  //1층인 경우
+			System.out.println(arr[0][0]);
+		
+	}
+
+}
