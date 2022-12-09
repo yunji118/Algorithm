@@ -1,0 +1,53 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class BOJ_1389 {
+
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken());    //유저의 수
+		int M = Integer.parseInt(st.nextToken());    //친구 관계의 수
+		int relation[][] = new int [N+1][N+1];
+		for(int i=1;i<=N;i++) {
+			for(int j=1;j<=N;j++) {
+				relation[i][j] = 5001;
+				if (i == j)
+					relation[i][j] = 0;
+			}
+		}
+		for(int i=0;i<M;i++) {
+			st = new StringTokenizer(br.readLine());
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			relation[a][b] = 1;
+			relation[b][a] = 1;
+		}
+		for(int i=1;i<=N;i++) {
+			for(int s=1;s<=N;s++) {
+				for(int e=1;e<=N;e++) {
+					relation[s][e] = Math.min(relation[s][i] + relation[i][e], relation[s][e]);
+				}
+			}
+		}
+		
+		int min = Integer.MAX_VALUE;
+		int ans = 0;
+		for(int i=1;i<=N;i++) {
+			int temp = 0;
+			for(int j=1;j<=N;j++) {
+				temp += relation[i][j];
+			}
+			if (temp < min) {
+				ans = i;
+				min = temp;
+			}
+		}
+		System.out.println(ans);
+
+	}
+
+}
