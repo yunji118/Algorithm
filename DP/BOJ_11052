@@ -1,0 +1,28 @@
+import java.io.*;
+import java.util.*;
+
+public class Main
+{
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());   //민규가 구매하려는 카드의 개수
+		int arr[] = new int [N+1];
+	    int dp[] = new int [N+1];
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		for(int i=1;i<=N;i++){
+		    arr[i] = Integer.parseInt(st.nextToken());
+		}
+		dp[0] = 0;
+		dp[1] = arr[1];
+		if (N > 1){
+		    for(int i=2;i<=N;i++){
+		        int max = arr[i];
+		        for(int j=1;j<i;j++){  //j장 들어있는 카드팩 사기
+		            max = Math.max(max, arr[j] + dp[i-j]);
+		        }
+		        dp[i] = max;
+		    }
+		}
+		System.out.println(dp[N]);
+	}
+}
