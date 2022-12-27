@@ -1,0 +1,63 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class BOJ_1213 {
+
+	private static int alpha[];
+	private static int oddidx, flag;
+	private static boolean isMirror(int len) {
+		if (len % 2 == 0) {  //짝수인 경우
+			for(int i=0;i<26;i++) {
+				if (alpha[i] % 2 == 1)  //홀수인게 하나라도 있으면
+					return false;
+			}
+			return true;
+		}
+		else { //홀수인 경우
+			flag = 0;
+			for(int i=0;i<26;i++) {
+				if (alpha[i] % 2 == 1) //홀수개의 알파벳이 등장한 경우
+				{
+					++flag;
+					oddidx = i;
+				}
+			}
+			if (flag == 1)  //홀수개의 알파벳이 1개인 경우
+				return true;
+			else //홀수개의 알파벳이 2개 이상인 경우
+				return false;
+		}
+	}
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String input = br.readLine();
+		alpha = new int [26];
+		for(int i=0;i<input.length();i++) {
+			alpha[input.charAt(i) - 'A']++;
+		}
+		
+		if(isMirror(input.length())) {
+			StringBuilder sb = new StringBuilder();
+			String ans = "";
+			for(int i=0;i<26;i++) {
+				for(int j=0;j<alpha[i]/2;j++) {
+					sb.append((char)(i + 'A'));
+				}
+			}
+			ans += sb.toString();
+			String rev = sb.reverse().toString();
+			if (flag == 1) { //홀수인게 있는 경우
+				ans += (char)(oddidx + 'A');
+			}
+			ans += rev;
+			System.out.println(ans);
+			
+		}
+		else {
+			System.out.println("I'm Sorry Hansoo");
+		}
+	}
+
+}
