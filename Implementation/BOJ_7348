@@ -1,0 +1,39 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class BOJ_7348 {
+
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine());    //테스트 케이스 개수
+		StringBuilder sb = new StringBuilder();
+		while (T-->0) {
+			int N = Integer.parseInt(br.readLine());    //이동 수
+			int work[][] = new int [N][2];
+			int dp[] = new int [200];
+			for(int i=0;i<N;i++) {
+				StringTokenizer st = new StringTokenizer(br.readLine());
+				int s =  Integer.parseInt(st.nextToken());
+				int t =  Integer.parseInt(st.nextToken());
+				work[i][0] = Math.min(s, t);
+				work[i][1] = Math.max(s, t);
+				work[i][0] = (work[i][0] - 1)/2;
+				work[i][1] = (work[i][1] - 1)/2;
+				for(int j=work[i][0];j<=work[i][1];j++) {
+					dp[j] += 10;
+				}
+			}
+			int result = 0;
+			for(int i=0;i<200;i++) {
+				result = Math.max(result, dp[i]);
+			}
+			sb.append(result+"\n");
+		}
+		System.out.print(sb.toString());
+	}
+
+}
