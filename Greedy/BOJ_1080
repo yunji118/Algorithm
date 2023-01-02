@@ -1,0 +1,81 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class BOj_1080 {
+
+	private static int src[][], dest[][];
+	private static int N, M;
+	private static void flip(int r, int c) {
+		for(int i=r;i<r+3;i++) {
+			for(int j=c;j<c+3;j++) {
+				if (src[i][j] == 1)
+					src[i][j] = 0;
+				else
+					src[i][j] = 1;
+			}
+		}
+	}
+	private static boolean isSame() {
+		for(int i=0;i<N;i++) {
+			for(int j=0;j<M;j++) {
+				if (src[i][j] != dest[i][j])  //다른게 등장하면
+					return false;
+			}
+		}
+		return true;
+	}
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		/*행렬의 크기 입력받기 N*M */
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		src = new int [N][M];
+		dest = new int [N][M];
+		/*src입력 받기*/
+		for(int i=0;i<N;i++) {
+			String input = br.readLine();
+			for(int j=0;j<M;j++) {
+				src[i][j] = input.charAt(j) - '0';
+			}
+		}
+		/*dest입력 받기*/
+		for(int i=0;i<N;i++) {
+			String input = br.readLine();
+			for(int j=0;j<M;j++) {
+				dest[i][j] = input.charAt(j) - '0';
+			}
+		}
+		int cnt = 0;
+		boolean flag = false;   //탈출 flag. flag = true이면 반복문을 빠져나온다.
+		for(int i=0;i<N;i++) {
+			for(int j=0;j<M;j++) {
+				if(src[i][j] != dest[i][j]) {  //해당 지점의 값이 다르면
+					if (i+2 < N && j+2 < M) {  //그 지점으로부터 3*3을 뒤집기
+						flip(i, j);
+						++cnt;
+					}
+					else {   //다른 원소가 있는데 뒤집을 수 없는 경우 -> dest배열로 만들 수 없음!
+						cnt = -1;
+						flag = true;
+					}
+				}
+				if(isSame()) {					
+					flag = true;
+					break;
+				}
+			}
+			if (flag)
+				break;
+		}
+		
+		if(flag)
+			System.out.println(cnt);
+		else
+			System.out.println(-1);
+	}
+
+}
