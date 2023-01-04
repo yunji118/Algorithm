@@ -1,0 +1,100 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class BOJ_7569 {
+
+	private static int M, N, H;
+	private static int map[][][];
+	private static LinkedList<Cord> ripen;
+	private static class Cord{
+		int h, r, c;
+		public Cord(int h, int r, int c) {
+			// TODO Auto-generated constructor stub
+			this.h = h;
+			this.r = r;
+			this.c = c;
+		}
+	}
+	private static void bfs() {
+		int dr[] = {0,0,1,-1}; //동서남북
+		int dc[] = {1,-1,0,0}; //동서남북 
+		Queue<Cord> que = new LinkedList<>();
+		que = ripen;   //현재 익은 토마토를 통째로 넣어주기
+		while (!que.isEmpty()) {
+			Cord now = que.poll();
+			int temph = now.h;
+			int tempr, tempc;
+			for(int i=0;i<4;i++) {
+				tempr = now.r + dr[i];
+				tempc = now.c + dc[i];
+				if (temph >= 0 && temph < H && tempr >= 0 && tempr < N && tempc >=0 && tempc < M && map[temph][tempr][tempc] == 0) {//정상 범위 안에 있고 아직 안 익은 토마토라면
+					map[temph][tempr][tempc] = map[now.h][now.r][now.c] + 1;
+					que.add(new Cord(temph, tempr, tempc));
+				}
+			}
+			tempr = now.r;
+			tempc = now.c;
+			//윗층검사
+			if (temph+1 >=0 && temph+1 < H && map[temph+1][tempr][tempc] == 0) {
+				map[temph+1][tempr][tempc] = map[now.h][now.r][now.c] + 1;
+				que.add(new Cord(temph+1, tempr, tempc));
+			}
+			//아랫층검사
+			if (temph-1 >=0 && temph-1 < H && map[temph-1][tempr][tempc] == 0) {
+				map[temph-1][tempr][tempc] = map[now.h][now.r][now.c] + 1;
+				que.add(new Cord(temph-1, tempr, tempc));
+			}
+		}
+	}
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		M = Integer.parseInt(st.nextToken());   //상자 가로 칸 수 <-얘가 열이네... 머쓱^_^
+		N = Integer.parseInt(st.nextToken());   //상자 세로 칸 수 <-행
+		H = Integer.parseInt(st.nextToken());   //상자 쌓아올리는 수
+		map = new int [H][N][M];
+		ripen = new LinkedList<>();
+		for(int i=0;i<H;i++) {
+			for(int j=0;j<N;j++) {
+				st = new StringTokenizer(br.readLine());
+				for(int k=0;k<M;k++) {
+					map[i][j][k] = Integer.parseInt(st.nextToken());
+					if (map[i][j][k] == 1) {
+						ripen.add(new Cord(i,j,k));
+					}
+				}
+			}
+		}
+		bfs();
+		
+		boolean flag = false;
+		int ans=0;
+		for(int h=0;h<H;h++) {
+			for(int r=0;r<N;r++) {
+				for(int c=0;c<M;c++) {
+					if (map[h][r][c] == 0) {//안 익은게 있으면
+						flag = true;
+						break;
+					}
+					if(map[h][r][c] > ans)
+						ans = map[h][r][c];
+				}
+				if (flag)
+					break;
+			}
+			if (flag)
+				break;
+		}
+		if (flag)
+			System.out.println(-1);
+		else
+			System.out.println(ans-1);
+
+	}
+
+}
