@@ -1,0 +1,51 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+public class BOJ_10819 {
+	
+	private static int N, ans = Integer.MIN_VALUE;
+	private static boolean visited[];
+	private static int list[], arr[];
+	private static int getMax() {
+		int res = 0;
+		for(int i=0;i<N-1;i++) {
+			res += Math.abs(list[i]-list[i+1]);
+		}
+		return res;
+	}
+	private static void backtracking(int depth) {  //주어진 수들 나열의 모든 조합을 구하기
+		if (depth == N) {
+			ans = Math.max(ans, getMax());
+			return ; 
+		}
+		for(int i=0;i<N;i++) {
+			if (!visited[i]) {
+				visited[i] = true;
+				list[depth] = arr[i];
+				backtracking(depth + 1);
+				visited[i] = false;
+			}
+		}
+	}
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		arr = new int [N];
+		list = new int [N];
+		visited = new boolean[N];
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		for(int i=0;i<N;i++) {
+			arr[i] = Integer.parseInt(st.nextToken());
+		}
+		backtracking(0);
+		System.out.println(ans);
+
+	}
+
+}
