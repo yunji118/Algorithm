@@ -1,0 +1,51 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class BOJ_5014 {
+	
+	private static int min = Integer.MAX_VALUE;
+	private static int info[];
+	private static int visited[];
+	
+	private static void bfs() {
+		Queue<Integer> que = new LinkedList<Integer>();
+		int dy[] = {info[3], -info[4]};
+		que.add(info[1]);
+		while (!que.isEmpty()) {
+			int nowstair = que.poll();
+			if (nowstair == info[2]) {
+				min = Math.min(min, visited[nowstair]-1);
+				return;	
+			}else {
+				for(int i=0;i<2;i++) {
+					int next = nowstair + dy[i];
+					if (next > 0 && next <= info[0] && visited[next] == 0) {
+						visited[next] = visited[nowstair] + 1;
+						que.add(next);
+					}
+				}
+			}
+			
+		}
+	}
+
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		info = new int [5]; // F:총 층수 S:현재층 G:가야하는 층 U D
+		for(int i=0;i<5;i++) {
+			info[i] = Integer.parseInt(st.nextToken());
+		}
+		visited = new int[info[0] + 1];
+		visited[info[1]] = 1;  //이거 처리 고민함. 처음엔 그냥 visited처리 안해줬다가 틀렸음. 일단 시작 층에 1 넣어주고 나중에 -1해서 출력하기
+		//dfs(info[1], 0);  dfs로 풀 경우 35% 에서 오류. -> stackoverflow 발생
+		bfs();
+		System.out.println(min == Integer.MAX_VALUE? "use the stairs" : min);
+	}
+
+}
