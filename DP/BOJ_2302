@@ -1,0 +1,35 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class BOJ_2302 {
+
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());  //좌석 개수 
+		int M = Integer.parseInt(br.readLine());  //고정석 개수 
+		int dp[] = new int[41];
+		dp[0] = 1;
+		dp[1] = 1;
+		dp[2] = 2;
+		
+		for(int i=3;i<=N;i++) {
+			dp[i] = dp[i-1] + dp[i-2];
+		}
+		int ans = 1;
+		int prev = 0;
+		for(int i=0;i<M;i++) {
+			int vip = Integer.parseInt(br.readLine());
+			ans *= dp[vip - prev - 1];
+			prev = vip;
+		}
+		ans *= dp[N - prev];
+		System.out.println(ans);
+		
+
+	}
+
+}
