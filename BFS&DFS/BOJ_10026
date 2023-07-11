@@ -1,0 +1,91 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class BOJ_10026 {
+
+	private static char map[][];
+	private static int normal, special;
+	private static boolean visited[][];
+	private static int N;
+	private static class Cord{
+		int r, c;
+		public Cord(int r, int c) {
+			this.r = r;
+			this.c = c;
+		}
+	}
+	private static void bfs(int sr, int sc) {
+		int dr []= {0,0,-1,1};
+		int dc []= {1,-1,0,0};
+		Queue<Cord> que = new LinkedList<>();
+		que.add(new Cord(sr, sc));
+		while (!que.isEmpty()) {
+			int r = que.peek().r;
+			int c = que.peek().c;
+			char color = map[r][c];
+			que.poll();
+			for(int i = 0;i<4;i++) {
+				int nr = r + dr[i];
+				int nc = c + dc[i];
+				if (nr >= 0 && nr < N && nc >= 0 && nc < N && !visited[nr][nc]) {
+					if (color == map[nr][nc]) { //색이 같을 때만 넣기
+						que.add(new Cord(nr, nc));
+						visited[nr][nc]=true;
+					}
+				}
+			}
+		}
+	}
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		map = new char [N][N];
+		visited = new boolean[N][N];
+		normal = 0;
+		special = 0;
+		for(int i=0;i<N;i++) {
+			String input = br.readLine();
+			for(int j=0;j<N;j++) {
+				map[i][j] = input.charAt(j);
+			}
+		}
+
+		for(int i=0;i<N;i++) {
+			for (int j=0;j<N;j++) {
+				if (!visited[i][j]) {
+					bfs(i, j);
+					++normal; //이렇게 하면 색이 달라서 끊긴 횟수를 알 수 있
+				}
+			}
+		}
+		
+		// 적록색약의 경우 R == G 로 인식하므로 G를 R로 바꿔주기 
+		for(int i=0;i<N;i++) {
+			for(int j=0;j<N;j++) {
+				if (map[i][j] == 'G') {
+					map[i][j] = 'R';
+				}
+			}
+		}
+		
+		visited = new boolean[N][N]; //방문 배열 초기
+		for(int i=0;i<N;i++) {
+			for (int j=0;j<N;j++) {
+				if (!visited[i][j]) {
+					bfs(i, j);
+					++special;
+				}
+			}
+		}
+		
+		System.out.println(normal + " " + special);
+		
+	}
+
+}
