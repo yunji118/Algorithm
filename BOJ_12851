@@ -1,0 +1,61 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class BOJ_12851 {
+	
+	private static int N,K;
+	private static int visited[][];
+	private static void bfs() {
+		Queue<int []> que = new LinkedList<>();
+		que.add(new int[] {N, 1});
+		visited[N][0] = 1;  //time
+		visited[N][1] = 1;  //지점 도달횟수 
+		while (!que.isEmpty()) {
+			int q[] = que.poll();
+			int soobin = q[0]; //수빈이의 위치
+			int time = q[1];  //걸린시간
+			
+			if (soobin + 1 >= 0 && soobin + 1 < 100001 && (visited[soobin + 1][0] == 0 || visited[soobin + 1][0] >= time + 1)) {
+				if (visited[soobin + 1][0] > time + 1)  //더 작은 값의 발견 
+					visited[soobin + 1][1] = 0;
+				visited[soobin + 1][1]++;
+				visited[soobin + 1][0] = time + 1;
+				que.add(new int[] {soobin + 1, time + 1});
+			}
+			if (soobin - 1 >= 0 && soobin - 1 < 100001 && (visited[soobin - 1][0] == 0 || visited[soobin - 1][0] >= time + 1)) {
+				if (visited[soobin - 1][0] > time + 1)  //더 작은 값의 발견 
+					visited[soobin - 1][1] = 0;
+				visited[soobin - 1][1]++;
+				visited[soobin - 1][0] = time + 1;
+				que.add(new int[] {soobin - 1, time + 1});
+			}
+			if (soobin * 2 >= 0 && soobin * 2 < 100001 && (visited[soobin * 2][0] == 0 || visited[soobin * 2][0] >= time + 1)) {
+				if (visited[soobin * 2][0] > time + 1)  //더 작은 값의 발견 
+					visited[soobin * 2][1] = 0;
+				visited[soobin * 2][1]++;
+				visited[soobin * 2][0] = time + 1;
+				que.add(new int[] {soobin * 2, time + 1});
+			}
+			
+		}
+		System.out.println(visited[K][0] - 1);
+		System.out.println(visited[K][1]);
+	}
+
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(st.nextToken());
+		visited = new int [100001][2];
+		bfs();
+	}
+
+}
