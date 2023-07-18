@@ -1,0 +1,47 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class BOJ_1074 {
+
+	private static int N, destr, destc, size, cnt;
+	private static void recursive(int r, int c, int size) {
+		if (size == 1) {
+			System.out.print(cnt);
+			return ;
+		}
+		int newsize = size / 2;  //현재를 절반으로 자른 값 -> 영역의 구분점 
+		
+		if (destr < r + newsize && destc < c + newsize) { //1사분면 
+			recursive(r, c, newsize);
+		}
+		if (destr < r + newsize && destc >= c + newsize) { //2사분면 
+			cnt += (size * size / 4);
+			recursive(r, c+newsize, newsize);
+		}
+		if (destr >= r + newsize && destc < c + newsize) { //3사분면 
+			cnt += (size * size / 4) * 2;
+			recursive(r+newsize, c, newsize);
+		}
+		if (destr >= r + newsize && destc >= c + newsize) { //4사분면 
+			cnt += (size * size / 4) * 3;
+			recursive(r+newsize, c+newsize, newsize);
+		}
+	}
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		destr = Integer.parseInt(st.nextToken());
+		destc = Integer.parseInt(st.nextToken());
+		size = (int)Math.pow(2, N);
+		cnt = 0;
+		recursive(0, 0, size);
+		
+	}
+
+}
