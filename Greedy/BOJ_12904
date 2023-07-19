@@ -1,0 +1,32 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class BOJ_12904 {
+
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String S = br.readLine();
+		String T = br.readLine();
+		while (S.length() < T.length()) {
+			int last = T.length() - 1;
+			if (T.charAt(last) == 'A') {
+				T = T.substring(0, last);
+			}
+			else{
+				T = T.substring(0, last);
+				StringBuffer sb = new StringBuffer(T);
+				T = sb.reverse().toString();
+			}
+		}
+		if (S.equals(T))
+			System.out.print(1);
+		else
+			System.out.print(0);
+
+	}
+
+}
