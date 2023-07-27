@@ -1,0 +1,31 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class BOJ_16194 {
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int card[] = new int [N+1];
+		for(int i=1;i<=N;i++) {
+			card[i] = Integer.parseInt(st.nextToken());
+		}
+		int dp [] = new int [N+1];
+		dp[0] = 0;
+		for(int i=1;i<=N;i++) {//i장을 사는데 최소비용 
+			dp[i] = card[i]; //일단 바로 i장 들어있는 카드를 사는 경우로 초기값 세팅  
+			for(int j=1;j<i;j++) {
+				dp[i] = Math.min(dp[i], dp[i-j] + card[j]);  // i 장을 만들기 위해 j 장짜리를 사고 i-j를 만드는 최소값  
+			}
+		}
+		System.out.println(dp[N]);
+		
+	}
+
+}
