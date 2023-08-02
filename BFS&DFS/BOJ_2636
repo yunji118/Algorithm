@@ -1,0 +1,78 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class BOJ_2636 {
+
+	private static int row, col, totalcheese;
+	private static int map[][];
+	private static boolean visited[][];
+	private static class Cord{
+		int r, c;
+		public Cord(int r, int c) {
+			this.r = r;
+			this.c = c;
+		}
+	}
+	private static void bfs(int sr, int sc) {
+		Queue<Cord> que = new LinkedList<>();
+		que.add(new Cord(sr, sc));
+		int dr[] = {0, 0, -1, 1};
+		int dc[] = {-1, 1, 0, 0};
+		
+		while (!que.isEmpty()) {
+			int r = que.peek().r;
+			int c = que.peek().c;
+			que.poll();
+			for(int i=0;i<4;i++) {
+				int nr = r + dr[i];
+				int nc = c + dc[i];
+				if (nr >= 0 && nr < row && nc >= 0 && nc < col && !visited[nr][nc]) {
+					visited[nr][nc] = true;
+					if (map[nr][nc] == 1) { //치즈인 경우 
+						totalcheese--;
+						map[nr][nc] = 0;
+					}else {
+						que.add(new Cord(nr, nc));  //공기인 경우 큐에 넣기 -> 공기의 상하좌우를 살펴서 치즈면 녹이고 공기면 큐에 넣고 
+					}
+				}
+			}
+			
+		}
+	}
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		row = Integer.parseInt(st.nextToken());
+		col = Integer.parseInt(st.nextToken());
+		map = new int [row][col];
+		totalcheese = 0;
+		for(int i=0;i<row;i++) {
+			st = new StringTokenizer(br.readLine());
+			for(int j=0;j<col;j++) {
+				map[i][j] = Integer.parseInt(st.nextToken());
+				if (map[i][j] == 1)
+					totalcheese++;
+			}
+		}
+		int left = 0;
+		int time = 0;
+		while (totalcheese > 0) {
+			time++;
+			left = totalcheese;  //매 시간마다 남은 치즈를 저장 (다 녹기 1시간 전에 남은 치즈 개수를 구하기 위해) 
+			visited = new boolean[row][col];  //매번 방문 체크 초기화해주기 이전 시간대와 달라졌으므로 
+			bfs(0,0); //매번 0,0 에서부터 탐색 시작하기 
+		}
+		System.out.println(time);
+		System.out.println(left);
+		
+
+	}
+
+}
