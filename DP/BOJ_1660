@@ -1,0 +1,38 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class BOJ_1660 {
+
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());
+		int step[] = new int [N];
+		int quad[] = new int [N];
+		step[0] = 0;
+		quad[0] = 0;
+		for(int i=1;i<N;i++) {
+			step[i] = step[i - 1] + i;
+		}
+		for(int i=1;i<N;i++) {
+			quad[i] = quad[i - 1] + step[i];
+		}
+		int dp[] = new int [N+1];
+		dp[0] = 0;
+		dp[1] = 1;
+		for(int i=2;i<=N;i++) {
+			dp[i] = i;
+			for(int j=1;j<=N;j++) {
+				if(i < quad[j])
+					break;
+				dp[i] = Math.min(dp[i], dp[i - quad[j]] + 1); //이전에 만든 사면체에 quad[j]사면체 1개를 추가한 값과 비교 
+			}
+		}
+		System.out.println(dp[N]);
+
+	}
+
+}
