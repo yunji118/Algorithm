@@ -1,0 +1,77 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
+
+public class BOJ_11000 {
+	
+	private static class Lesson implements Comparable<Lesson>{
+		private int start, end;
+		public Lesson(int start, int end) {
+			this.start = start;
+			this.end = end;
+		}
+		@Override
+		public int compareTo(Lesson o) {
+			// TODO Auto-generated method stub
+			if (this.start == o.start)
+				return this.end - o.end;  //end가 빠른 순으로 
+			return this.start - o.start;  //start가 빠른 순으로 
+		}
+		
+	}
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine()); //수업의 개수 
+		LinkedList<Lesson> list = new LinkedList<>();
+		
+		for (int i=0;i<N;i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			int s = Integer.parseInt(st.nextToken());
+			int e = Integer.parseInt(st.nextToken());
+				list.add(new Lesson(s, e));
+		}
+		Collections.sort(list);
+		int endtime[] = new int [N];
+		
+		PriorityQueue<Integer> pq = new PriorityQueue<>();  //수업이 끝나는 시각을 저장함. 우선순위 큐로 인해 오름차순으로 저장됨. 
+		
+		pq.add(list.poll().end);
+		for(int i=0;i<N-1;i++) {
+			if (pq.peek() <= list.peek().start)
+				pq.poll();
+			pq.add(list.poll().end);
+		}
+		System.out.println(pq.size());
+//		int idx = 0;
+//		for(int i=0;i<N;i++) {
+//			Lesson lesson = list.poll();
+//			int min = Integer.MAX_VALUE;
+//			int room = idx;
+//			for(int j=0;j<N;j++) {
+//				if (endtime[j] <= lesson.start && min > (lesson.start - endtime[j])) { //end time보다 시작시간이 같거나 늦으면 해당 방에 들어갈 수 있음 
+//					room = j;
+//					min = lesson.start-endtime[j];
+//				}
+//				idx = Math.max(idx, j);
+//			}
+//			endtime[room] = lesson.end;
+//		}
+		
+//		int cnt = 0;
+//		for(int i=0;i<N;i++) {
+//			if (endtime[i] > 0)
+//				++cnt;
+//		}
+//		
+
+	}
+
+}
