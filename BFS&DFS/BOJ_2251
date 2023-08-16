@@ -1,0 +1,83 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.TreeSet;
+
+public class BOJ_2251 {
+	
+	private static int total;
+	private static int limit[], bucket[];
+	private static boolean visited[][];
+	private static Set<Integer> ans; 
+	private static void dfs(int a, int b, int c) {
+		if (visited[a][b])
+			return ;
+		if (a == 0)  ///a가 비었을 때 c의 물의 양을 저장 
+			ans.add(c);
+		visited[a][b] = true;
+		
+		// a->b 로 옮길 때  
+		if (a+b > limit[1])  //b의 한계보다 많은 경우 
+			dfs((a+b) - limit[1], limit[1], c);
+		else
+			dfs(0,a+b,c);
+		
+		//a->c
+		if (a+c > limit[2])
+			dfs((a+c)-limit[2], b, limit[2]);
+		else
+			dfs(0, b, a+c);
+		
+		//b->a
+		if (a+b > limit[0])
+			dfs(limit[0], (a+b)-limit[0], c);
+		else
+			dfs(a+b, 0, c);
+		
+		//b->c
+		if (b+c > limit[2])
+			dfs(a, (b+c)-limit[2], limit[2]);
+		else
+			dfs(a, 0, b+c);
+		
+		//c->a
+		if (c+a > limit[0])
+			dfs(limit[0], b, (c+a)-limit[0]);
+		else
+			dfs(a+c, b, 0);
+		
+		//c->b
+		if (c+b > limit[1])
+			dfs(a, limit[1], (c+b)-limit[1]);
+		else
+			dfs(a, c+b, 0);
+		
+	}
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		limit = new int [3];
+		visited = new boolean[201][201];
+		bucket = new int[3];
+		for(int i=0;i<3;i++) {
+			limit[i] = Integer.parseInt(st.nextToken());
+			if (i == 2)
+				bucket[i] = limit[i];
+			else
+				bucket[i] = 0;
+		}
+		total = limit[2];
+		ans = new TreeSet<>();
+		dfs(0,0,limit[2]);
+		
+		for(int i : ans)
+			System.out.print(i + " ");
+		
+	}
+
+}
