@@ -1,0 +1,71 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class BOJ_2589 {
+
+	private static int N, M;
+	private static int map[][], visited[][];
+	private static int min;
+	private static class Cord{
+		int r,c;
+		public Cord(int r, int c) {
+			this.r = r;
+			this.c = c;
+		}
+	}
+	private static void bfs(int sr, int sc) {
+		Queue<Cord> que = new LinkedList<>();
+		int dr[] = {0,0,-1,1};
+		int dc[] = {1,-1,0,0};
+		que.add(new Cord(sr, sc));
+		while (!que.isEmpty()) {
+			int r = que.peek().r;
+			int c = que.peek().c;
+			que.poll();
+			for(int i=0;i<4;i++) {
+				int nr = r + dr[i];
+				int nc = c + dc[i];
+				if (nr >=0 && nr < N && nc >=0 && nc < M && map[nr][nc] == 1 && visited[nr][nc] == 0) {
+					visited[nr][nc] = visited[r][c] + 1;
+					que.add(new Cord(nr, nc));
+					min = Math.max(min, visited[nr][nc]);
+				}
+				
+			}
+		}
+	}
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		map = new int [N][M];
+		for(int i=0;i<N;i++) {
+			String input = br.readLine();
+			for(int j=0;j<M;j++) {
+				if (input.charAt(j) == 'L')
+					map[i][j] = 1;
+			}
+		}
+		min = -1;
+		for(int i=0;i<N;i++) {
+			for(int j=0;j<M;j++) {
+				visited = new int [N][M];
+				if (map[i][j] == 1) {
+					visited[i][j] = 1;
+					bfs(i,j);
+				}
+			}
+		}
+		System.out.println(min - 1); //방문표시를 위해 시작점을 1로 설정했으므로 -1 해주기 
+
+	}
+
+}
