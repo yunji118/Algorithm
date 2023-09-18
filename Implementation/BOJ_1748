@@ -1,0 +1,24 @@
+import java.io.*;
+import java.util.*;
+
+public class Main
+{
+  
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String N = br.readLine();
+		long ans = 0;
+	    int len = N.length();
+	    int num = Integer.parseInt(N);
+	    int digit = 1;
+		for(int i=0;i<len;i++){
+		    if (i == len - 1){
+		        ans += ((num - digit + 1) * (i+1));
+		    }else{
+		        ans += (9 * digit * (i+1));
+		        digit *= 10;
+		    }
+		}
+		System.out.println(ans);
+	}
+}
