@@ -1,0 +1,56 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.StringTokenizer;
+
+public class BOJ_1495 {
+
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken());
+		int S = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+		int v[] = new int [N+1];
+		st = new StringTokenizer(br.readLine());
+		for(int i=1;i<=N;i++) {
+			v[i] = Integer.parseInt(st.nextToken());
+		}
+		int dp[] = new int [M+1];  //dp[v] = i;  // i번째 연주에서 볼륨 v로 연주할 수 있음 
+	//최종적으로 dp[?] = N 을 했을 때 ?가 가장 큰 값을 출력하면 됨  
+		
+		Arrays.fill(dp, -1);  //언제 연주 가능하니? -1 번째요. 일단 초기화 
+		dp[S] = 0; //시작 볼륨은 0번째에서 연주 가능 
+		
+		for(int i=1;i<=N;i++) {
+			LinkedList<Integer> list = new LinkedList<>();  //i-1번째에 연주 가능한 볼륨(얘네 여러개임)에서 +v -v 한 값들을 모두 저장하기.
+			
+			for(int j=0;j<=M;j++) { //모든 볼륨을 탐색 
+				if (dp[j] == i-1) {  //i-1 번째에 연주가능한 볼륨을 찾기 
+					if ((j - v[i]) >= 0 &&  (j - v[i]) <= M)
+						list.add(j - v[i]);
+					if ((j + v[i]) >= 0 && (j + v[i]) <= M)
+						list.add(j + v[i]);
+					
+				}
+			}
+			
+			for(int w=0;w<list.size();w++)
+				dp[list.get(w)] = i;
+			
+		}
+		
+		int ans = -1;
+		for(int i=0;i<=M;i++) {
+			if (dp[i] == N)
+				ans = Math.max(ans, i);
+		}
+		System.out.println(ans);
+	}
+
+}
