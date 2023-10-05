@@ -1,0 +1,58 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class BOJ_1347 {
+
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int map[][] = new int [101][101];
+		int dr[] = {1, 0, -1, 0};
+		int dc[] = {0, 1, 0, -1};
+		int head = 0;
+		int r = 50;
+		int c = 50;
+		int maxr = 50;
+		int maxc = 50;
+		int minr = 50;
+		int minc = 50;
+		int len = Integer.parseInt(br.readLine());
+		String input = br.readLine();
+		map[r][c] = 1;
+		//1:. 2:#
+		for(int i=0;i<len;i++) {
+			char now = input.charAt(i);
+			
+			if (now == 'F') {
+				r += dr[head];
+				c += dc[head];
+				map[r][c] = 1; 
+				maxr = Math.max(maxr, r);
+				minr = Math.min(minr, r);
+				maxc = Math.max(maxc, c);
+				minc = Math.min(minc, c);
+			}else if (now == 'L') {
+				head = (head + 1) % 4;
+			}else if (now == 'R'){
+				head = (head + 3) % 4;
+			}
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		for(int i=minr;i<=maxr;i++) {
+			for(int j=minc;j<=maxc;j++) {
+				if (map[i][j] == 1)
+					sb.append(".");
+				else
+					sb.append("#");
+			}
+			sb.append("\n");
+		}
+		System.out.print(sb.toString());
+
+	}
+
+}
