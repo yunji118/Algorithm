@@ -1,0 +1,79 @@
+package boj;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class BOJ_4963 {
+
+	private static int w, h;
+	private static int map[][];
+	private static boolean visited[][];
+	private static class Cord{
+		int r, c;
+		public Cord(int r, int c) {
+			this.r = r;
+			this.c = c;
+		}
+	}
+	private static void bfs(int sr, int sc) {
+		int dr[] = {0,0,-1,1,-1,-1,1,1}; //서 동 북 남 북동 북서 남동 남서 
+		int dc[] = {-1,1,0,0,1,-1,1,-1};
+		Queue<Cord> que = new LinkedList<>();
+		que.add(new Cord(sr, sc));
+		
+		while (!que.isEmpty()) {
+			Cord now = que.poll();
+			
+			for(int i=0;i<8;i++) {
+				int nr = now.r + dr[i];
+				int nc = now.c + dc[i];
+				
+				if (nr >= 0 && nr < h && nc >= 0 && nc < w && !visited[nr][nc] && map[nr][nc] == 1) {
+					visited[nr][nc] = true;
+					que.add(new Cord(nr, nc));
+				}
+			}
+		}
+	}
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
+		while (true) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			w = Integer.parseInt(st.nextToken());
+			h = Integer.parseInt(st.nextToken());
+			if (w ==0 && h == 0)
+				break;
+			
+			int numofarea = 0;			
+			map = new int [h][w];
+			visited = new boolean[h][w];
+			for(int i=0;i<h;i++) {
+				st = new StringTokenizer(br.readLine());
+				for (int j=0;j<w;j++) {
+					map[i][j] = Integer.parseInt(st.nextToken());
+				}
+			}
+			
+			for(int i=0;i<h;i++) {
+				for(int j=0;j<w;j++) {
+					if (map[i][j] == 1 && !visited[i][j]) {
+						visited[i][j] = true;
+						bfs(i,j);
+						++numofarea;
+					}
+				}
+			}
+			sb.append(numofarea + "\n");
+		}
+		System.out.print(sb.toString());
+		
+
+	}
+
+}
