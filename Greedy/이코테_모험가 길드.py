@@ -14,7 +14,7 @@ i = 0
 while i < N:
     num += 1   #현재 1명 추가
 
-    if gongpo[i] == num:
+    if gongpo[i] >= num:
         ans += 1
         num = 0
 
